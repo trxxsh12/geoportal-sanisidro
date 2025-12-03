@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Geoportal San Isidro - Áreas Verdes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+    body { margin:0; padding:0; }
+    #map { width: 100%; height: 100vh; }
+</style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// Crear mapa centrado en San Isidro
+var map = L.map('map').setView([-12.097, -77.036], 15);
+
+// Capa base
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+// Cargar GeoJSON desde la carpeta /data/
+fetch("../data/SaniAVGT.json")
+    .then(res => res.json())
+    .then(data => {
+        L.geoJSON(data, {
+            style: {
+                color: "green",
+                weight: 1,
+                fillColor: "lightgreen",
+                fillOpacity: 0.5
+            }
+        }).addTo(map);
+    })
+    .catch(err => console.log("Error cargando el GeoJSON:", err));
+</script>
+
+</body>
+</html>
